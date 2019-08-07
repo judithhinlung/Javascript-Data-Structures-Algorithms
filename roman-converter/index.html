@@ -1,0 +1,64 @@
+<html>
+  <head>
+<meta charset="utf-8">
+
+    <title>Roman Numeral Converter</title>
+<script>
+
+function add_nums(key, count, nums) {
+  while (count > 0) {
+    nums.push(key);
+    count -= 1;
+  }
+  return nums;
+}
+
+function convertToRoman(num) {
+  var current_num = num;
+  var a_nums = [1000, 500, 100, 50, 10, 5, 1];
+  var r_nums = ["M", "D", "C", "L", "X", "V", "I"];
+  var nums = [];
+  for (var i = 0; i < a_nums.length; i++) {
+    if (current_num >= a_nums[i]) {
+      if (i > 0 && current_num >= (a_nums[i-1]*0.9) && a_nums[i] == (a_nums[i-1]*.5)) {
+        nums.push(r_nums[i+1]);
+        nums.push(r_nums[i-1]);
+        current_num -= a_nums[i-1]*.9;
+      }
+      else if (i > 0 && current_num >= a_nums[i-1]*.8 && a_nums[i] == a_nums[i-1]*.2) {
+        nums.push(r_nums[i]);
+        nums.push(r_nums[i-1]);
+        current_num -= a_nums[i-1]*.8;
+      }
+      else {
+        var count = Math.floor(current_num / a_nums[i]);
+        add_nums(r_nums[i], count, nums);
+        current_num = current_num%a_nums[i];
+      }
+    }
+  }
+  var str = nums.join("");
+  return str;
+}
+function get_num() {
+ var inp = document.getElementById("input").value;
+  document.getElementById("result").innerHTML = convertToRoman(inp);
+}
+</script>
+  </head>
+<body>
+<h1>Palindrome Test</h1>
+  <form name="myForm" id="myForm">
+<label for="inp">Enter number:</label>
+<input autofocus="" type="text" id="input" placeholder="Enter number:">
+<input type="button" value="Submit"
+                    onclick="get_num()">
+                 <input type="reset" value="Reset" onclick="res();">
+</form>
+<h2>Test</h2>
+<div id="test"></div>
+<h2>result:</h2>
+<div id="result"></div>
+
+  </body>
+</html>

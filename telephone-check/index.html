@@ -1,0 +1,38 @@
+<html>
+  <head>
+<meta charset="utf-8">
+
+    <title>Telephone Check</title>
+<script>
+function telephoneCheck(str) {
+  var pattern = /^1?[-\s]??\d{3}?[-\s]?\d{3}[-\s]?\d{4}$/;
+  var pattern_w_paren = /^1?[-\s]?\(\d{3}\)[-\s]?\d{3}[-\s]?\d{4}$/;
+  if (pattern.test(str) || pattern_w_paren.test(str)) {
+     return true;
+  }
+  return false;
+}
+
+
+function get_num() {
+ var inp = document.getElementById("input").value;
+  document.getElementById("result").innerHTML = telephoneCheck(inp);
+}
+</script>
+  </head>
+<body>
+<h1>Palindrome Test</h1>
+  <form name="myForm" id="myForm">
+<label for="inp">Enter number:</label>
+<input autofocus="" type="text" id="input" placeholder="Enter number:">
+<input type="button" value="Submit"
+                    onclick="get_num()">
+                 <input type="reset" value="Reset" onclick="res();">
+</form>
+<h2>Test</h2>
+<div id="test"></div>
+<h2>result:</h2>
+<div id="result"></div>
+
+  </body>
+</html>

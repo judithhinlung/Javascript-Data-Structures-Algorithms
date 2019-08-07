@@ -1,0 +1,54 @@
+<html>
+  <head>
+<meta charset="utf-8">
+
+    <title>Rot13</title>
+<script>
+
+function shift(num) {
+  return (num+26) % 26;
+}
+function decode(letter) {
+  var init_letter = "A";
+  var init = init_letter.charCodeAt(0);
+  var mod = letter.charCodeAt(0);
+  var new_code = ((mod-init)+(26-13))%26;
+  var decoded_letter =  String.fromCharCode((init + new_code));
+  return decoded_letter;
+}
+
+function rot13(str) {
+  var arr = str.split("");
+  for (var i = 0; i < arr.length; i++) {
+    var regexp = /[A-Za-z]/;
+    if (regexp.test(arr[i])) {
+      arr[i] = decode(arr[i]);
+    }
+  }
+  return arr.join("");
+}
+function print_letter(letter) {
+  return String.fromCharCode(letter.charCodeAt(0) + 1);
+}
+function get_rot13() {
+ var inp = document.getElementById("input").value;
+  document.getElementById("result").innerHTML = rot13(inp);
+}
+</script>
+  </head>
+<body>
+<h1>Palindrome Test</h1>
+  <form name="myForm" id="myForm">
+<label for="inp">Enter string:</label>
+<input autofocus="" type="text" id="input" placeholder="Enter string:">
+<input type="button" value="Submit"
+                    onclick="get_rot13()">
+                 <input type="reset" value="Reset" onclick="res();">
+</form>
+<h2>Test</h2>
+<div id="test"></div>
+<h2>result:</h2>
+<div id="result"></div>
+
+  </body>
+</html>

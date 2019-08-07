@@ -1,0 +1,146 @@
+<html>
+  <head>
+<meta charset="utf-8">
+
+    <title>Cash Register</title>
+<script>
+function get_change(amount, val, available) {
+  var current = 0;
+  if (available == amount) {
+    current = amount;
+  }
+  else if (available < amount) {
+    current = available; 
+  }
+  else if (amount >= val) {
+    current = Math.floor(amount/val) * val;
+  }
+  current = +current.toFixed(2);
+  return current;
+}
+function cid_empty(cid) {
+  for (var i = 0; i < cid.length; i++) {
+    var val = cid[i][1];
+    if (val > 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function get_status(amount, total, cid) {
+  var status = "";
+  if (total == amount) {
+    status = "CLOSED";
+  }
+  else if (total < amount) {
+    status = "INSUFFICIENT_FUNDS";
+  }
+  else  if (total > amount) {
+    status = "OPEN";
+  }
+  return status;
+}
+
+function Change_object(status, change) {
+  this.status = status;
+  this.change = change;
+}
+function get_cid_total(cid) {
+  var sum = 0;
+  for (var i = 0; i < cid.length; i++) {
+    sum += cid[i][1];
+  }
+  return sum;
+}
+function make_change(amount, cid) {
+  var currencies = {
+			   PENNY: 0.01,
+    NICKEL: 0.05,
+    DIME: 0.1,
+    QUARTER: 0.25,
+    ONE: 1,
+    FIVE: 5,
+    TEN: 10,
+    TWENTY: 20,
+    HUNDRED: 100};
+ 
+  var total = get_cid_total(cid);
+  var change = [];
+  var status = get_status(amount, total, cid);
+  if (status == "INSUFFICIENT_FUNDS") {
+    change = [];
+  }
+  else if (status == "CLOSED") {
+    change = cid;
+  }
+  else {
+    var rem = amount, running_total = 0;
+    cid = cid.reverse();
+    for (var i = 0; i < cid.length; i++) {
+      if (rem == 0) {
+        break;
+      }
+      if (cid[i][0] == "ONE HUNDRED") {
+        var key = "HUNDRED";
+      }
+      else {
+        var key = cid[i][0];
+      }
+      var available = cid[i][1];
+      var val = currencies[key];
+      var current = get_change(rem, val, available);
+      if (current > 0) {
+        var current_change = [cid[i][0], current];
+        change.push(current_change);
+        running_total += current;
+       rem = Math.round(100*(rem-current))/100;
+       cid[i][1] -= current;
+      }
+    }
+  }
+  if (running_total < amount) {
+    status = "INSUFFICIENT_FUNDS"
+    change = [];
+  }
+  else if (running_total == amount && running_total < total) {
+    status = "OPEN";
+  }
+  var output = { status: status, change: change };
+  return output;
+}
+function checkCashRegister(price, cash, cid) {
+  var amount = +(cash - price).toFixed(2);
+  var obj = make_change(amount, cid);
+  return Object.entries(obj);
+}
+function get_num() {
+ var price = parseFloat(document.getElementById("price").value);
+ var payment = parseFloat(document.getElementById("payment").value);
+var cid = [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]];
+
+
+;
+
+  document.getElementById("result").innerHTML = checkCashRegister(price, payment, cid);
+}
+</script>
+  </head>
+<body>
+<h1>Check Cash Register</h1>
+  <form name="myForm" id="myForm">
+<label for="price">Enter price:</label>
+<input autofocus="" type="text" id="price" placeholder="Enter price:">
+<label for="payment">Enter payment:</label>
+<input type="text" id="payment" placeholder="Enter payment:">
+<input type="button" value="Submit"
+                    onclick="get_num()">
+                 <input type="reset" value="Reset" onclick="res();">
+</form>
+<h2>Test</h2>
+<div id="test"></div>
+<h2>result:</h2>
+<div id="result"></div>
+
+  </body>
+</html>

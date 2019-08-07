@@ -1,0 +1,49 @@
+<html>
+  <head>
+<meta charset="utf-8">
+
+    <title>Palindrome Test</title>
+<script>
+function palindrome(str) {
+  str = str.toLowerCase();
+  var regexp = /[a-z1-9]/ig;
+  var new_str = str.match(regexp);
+  if (new_str == undefined || new_str.length < 1) {
+    return true;
+  }
+  var i = 0, j = new_str.length-1, mid = new_str.length / 2;
+  // document.write(typeof(new_str));
+  while (i <= mid && j >= mid) {
+    if (i == j) {
+      break;
+    }
+    else if (new_str[i] != new_str[j]) {
+      return false;
+    }
+  i +=1;
+  j -= 1;
+  }
+  return true;
+}
+function get_palindrome() {
+    var inp = document.getElementById("input").value;
+  document.getElementById("result").innerHTML = palindrome(inp);
+}
+</script>
+  </head>
+<body>
+<h1>Palindrome Test</h1>
+  <form name="myForm" id="myForm">
+<label for="inp">Enter string:</label>
+<input autofocus="" type="text" id="input" placeholder="Enter string:">
+<input type="button" value="Submit"
+                    onclick="get_palindrome()">
+                 <input type="reset" value="Reset" onclick="res();">
+</form>
+<h2>Test</h2>
+<div id="test"></div>
+<h2>result:</h2>
+<div id="result"></div>
+
+  </body>
+</html>
